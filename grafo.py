@@ -110,10 +110,7 @@ class Grafo:
             self.A[nome] = a
         else:
             ArestaInvalidaException('A aresta ' + self.A[a] + ' é inválida')
-
-    '''
-    2) a
-    '''
+        
     def vertices_nao_adjacentes(self):
         aresta = self.A.values()
         resultado = []
@@ -133,9 +130,19 @@ class Grafo:
         return False
 
     def ha_paralelas(self):
-        arestas = list(self.A.values())
-        if len(arestas) != len(set(arestas)):
-            return True
+        arestas = self.A.values()
+        index1 = 0
+        for i in arestas:
+            index2 = 0
+            aresta = i.split('-')
+            paralela = aresta[-1] + '-' + aresta[0]
+            for j in arestas:
+                if index1 != index2:
+                    if (j == paralela) or (j == i):
+                        return True
+                index2 += 1
+            index1 += 1
+            index2 = 0
         return False
 
     def grau(self,vertice):
@@ -153,15 +160,12 @@ class Grafo:
         return arestas
 
     def eh_completo(self):
-        aresta = self.A.values()
-        for x in self.N:
-            for y in self.N:
-                if(x != y):
-                    aresta_indo = x + "-" + y
-                    aresta_vindo = y + "-" + x
-                    if (aresta_indo not in aresta) and (aresta_vindo not in aresta):
-                        return False
-
+        if self.N == []:
+            return False
+        arestas = self.vertices_nao_adjacentes()
+        for x in arestas:
+            if x.split(self.SEPARADOR_ARESTA)[0] != x.split(self.SEPARADOR_ARESTA)[1]:
+                return False
         return True
 
 
