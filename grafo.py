@@ -169,6 +169,110 @@ class Grafo:
         return True
 
 
+    def lista_arestas(self, raiz='', ja_visitado=list()):
+        arestas = list()
+        for i, v in enumerate(self.A.items()):
+
+            if raiz in v[1] and ((v[1].split('-')[0] not in ja_visitado) and (v[1].split('-')[1])):
+                arestas.append(v)
+        return arestas
+
+    def padroniza_arestas(self, raiz = '', aresta =''):
+        aresta_padrao = ''
+        if aresta[1].split('-')[0] == raiz:
+            aresta_padratonhao= aresta[1]
+        elif aresta[1].split('-')[1] == raiz:
+            aresta_padrao = aresta[1].split('-')[1] + '-' + aresta[1].split('-')[0]
+        return aresta_padrao
+    def visita(self, raiz='', ja_visitados=list(), dfs=list()):
+        arestas = self.A.items()
+        arestas_raiz = self.lista_arestas(raiz, ja_visitados)
+        if raiz in ja_visitados:
+            return dfs, ja_visitados
+        ja_visitados.append(raiz)
+
+        for i, v in enumerate(arestas_raiz):
+            aresta_padrao = self.padroniza_arestas(raiz, v)
+            if raiz == aresta_padrao.split('-')[0] and (aresta_padrao.split('-')[1] not in dfs):
+                dfs.append(v[0])
+                dfs.append(aresta_padrao.split('-')[1])
+                self.visita(aresta_padrao.split('-')[1], ja_visitados, dfs)
+                if aresta_padrao.split('-')[1] not in ja_visitados:
+                    ja_visitados.append(aresta_padrao.split('-')[1])
+        return dfs, ja_visitados
+
+
+    def dfs(self, raiz=''):
+        dfs = list()
+
+        dfs.append(raiz)
+
+        ja_visitado = list()
+
+        dfs, ja_visitado = self.visita(raiz, ja_visitado, dfs)
+
+        return dfs, ja_visitado
+
+    def ha_caminho(self, l, raiz):
+        print(raiz, "->>", l)
+        arestas_list = list(self.A.values())
+        for arestas in self.A.items():
+            if raiz in arestas[1]:
+               arestas_list.remove(arestas[1])
+        print(arestas_list)
+
+        if(self.ha_caminhada(arestas_list,l[0],l[1])):
+            print("Correto")
+        else:
+            print("Não correto")
+
+    def arestas_adj(self, vertice,a):
+        arestas = list()
+
+        for x in a:
+            if (vertice == x):
+                arestas.append(x)
+        return arestas
+
+
+    def ha_caminhada(self,arestas,v1,v2):
+        if(arestas == None):
+            return False
+        aresta = v1+self.SEPARADOR_ARESTA+v2
+
+        if(aresta in arestas or aresta[::-1] in arestas):
+            return True
+
+        arestas_adjacentes_a_v1 = self.arestas_adj(v1,arestas)
+        if (arestas_adjacentes_a_v1 == []):
+            return False
+        for x in arestas_adjacentes_a_v1:
+            arestas.remove(x)
+            if(self.ha_caminhada(arestas,x.split(self.SEPARADOR_ARESTA)[1],v2)):
+                return True
+
+
+
+
+    def ha_ciclo(self):
+        l = []
+        arestas = list(self.A.values())
+        for x in self.N:
+            for y in arestas:
+                if x in y:
+                    vertice_1,vertice_2 = y.split(self.SEPARADOR_ARESTA)
+                    if(vertice_1 != x):
+                        l.append(vertice_1)
+                    elif(vertice_2 != x):
+                        l.append(vertice_2)
+            if(len(l) > 1):
+                self.ha_caminho(l,x)
+                l = []
+
+
+
+
+
     def __str__(self):
         '''
         Fornece uma representação do tipo String do grafo.
@@ -190,6 +294,8 @@ class Grafo:
                 grafo_str += ", "
 
         return grafo_str
+
+
 
 
 
