@@ -296,10 +296,16 @@ class Grafo:
         return vertices
 
     def ha_caminho(self,v1,v2,visitados = []):
+        if (self.N.index(v1) > self.N.index(v2)):
+            aux = v2
+            v2 = v1
+            v1 = aux
+
         visitados.append(v1)
         ind_1 = self.N.index(v1)
         ind_2 = self.N.index(v2)
-        if(self.M[ind_1][ind_2] > 0):
+
+        if(self.M[ind_1][ind_2] != self.SEPARADOR_ARESTA and self.M[ind_1][ind_2] > 0):
             return True
 
         vertices = self.vertice_sobre_vertice(v1,visitados)
