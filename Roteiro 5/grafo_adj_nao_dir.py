@@ -282,22 +282,21 @@ class Grafo:
     def vertice_sobre_vertice(self,vertice, visitados = []):
         vertices = list()
         index = self.N.index(vertice) + 1
-        cont = 0
 
         for indice_1 in range(index):
             for indice_2 in range(indice_1, len(self.M)):
                 if (self.M[indice_1][indice_2] > 0 and index - 1 in (indice_1, indice_2)):
                     v1,v2 = self.N[indice_1],self.N[indice_2]
-                    if(v1 != vertice and v1 not in visitados):
-                        vertices.append(v1)
+                    if(v1 != vertice and v1 not in visitados): # Adicona a lista vertices adjacentes ao vértive em questão considerando que tal vértice
+                        vertices.append(v1)                    # não esteja na lista de visitados.
                     elif(v2 not in visitados):
                         vertices.append(v2)
 
         return vertices
 
     def ha_caminho(self,v1,v2,visitados = []):
-        if (self.N.index(v1) > self.N.index(v2)):
-            aux = v2
+        if (self.N.index(v1) > self.N.index(v2)):       # Já que o grafo não é direcionado então 'J-Z' == 'Z-J' e o índice de v1 é sempre <= ao índice de v2
+            aux = v2                                    # já que apenas da diagonal principal para cima é considerada na matriz de adjacência para grafos não direcionados.
             v2 = v1
             v1 = aux
 
@@ -305,7 +304,7 @@ class Grafo:
         ind_1 = self.N.index(v1)
         ind_2 = self.N.index(v2)
 
-        if(self.M[ind_1][ind_2] != self.SEPARADOR_ARESTA and self.M[ind_1][ind_2] > 0):
+        if(self.M[ind_1][ind_2] > 0):
             return True
 
         vertices = self.vertice_sobre_vertice(v1,visitados)
@@ -318,7 +317,6 @@ class Grafo:
         for vertice in vertices:
             if(self.ha_caminho(vertice,v2,visitados)):
                 return True
-
 
         return False
 
