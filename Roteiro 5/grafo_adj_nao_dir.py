@@ -320,6 +320,73 @@ class Grafo:
 
         return False
 
+    def conexo(self):
+        vertice = self.N[0]
+        for v in self.N[1::]:
+            if not(self.ha_caminho(vertice,v,[])):
+                return False
+        return True
+
+    def matriz_vazia(self):
+
+        for vertice in self.N:
+            if(self.grau(vertice) > 0):
+                return False
+        return True
+
+    def vertice_sobre_vertice_euleriano(self, vertice, visitados=[]):
+        vertices = list()
+        index = self.N.index(vertice) + 1
+
+        for indice_1 in range(index):
+            for indice_2 in range(indice_1, len(self.M)):
+                if (self.M[indice_1][indice_2] > 0 and index - 1 in (indice_1, indice_2)):
+                    v1, v2 = self.N[indice_1], self.N[indice_2]
+                    if (v1 != vertice and (v1 not in visitados or self.grau(v1) > 0)):  # Adicona a lista vertices adjacentes ao vértive em questão considerando que tal vértice
+                        vertices.append(v1)  # não esteja na lista de visitados.
+                    elif (v2 not in visitados or self.grau(v2) > 0):
+                        vertices.append(v2)
+
+        return vertices
+
+    def caminho_euleriano(self):
+        if not (self.conexo()):
+            return False
+
+        for vertice in self.N:
+            lista = self.eh_euleriano(vertice,[],[])
+            if( lista != []):
+                lista.append(vertice)
+                return lista
+        return []
+
+    def eh_euleriano(self,vertice,caminho = [],visitados = []):
+        visitados.append(vertice)
+        vertices = self.vertice_sobre_vertice_euleriano(vertice,visitados)
+
+        if(self.matriz_vazia() and vertices == []):
+            return True
+
+
+        for v in vertices:
+            ind_1 = self.N.index(vertice)
+            ind_2 = self.N.index(v)
+            if (ind_1 > ind_2):
+                aux = ind_2
+                ind_2 = ind_1
+                ind_1 = aux
+
+            self.M[ind_1][ind_2] -= 1
+
+            if(self.eh_euleriano(v,caminho,visitados)):
+                caminho.append(v)
+                caminho.append(vertice + self.SEPARADOR_ARESTA + v)
+                return caminho
+            else:
+                self.M[ind_1][ind_2] += 1
+
+        return []
+
     def __str__(self):
         '''
         Fornece uma representação do tipo String do grafo.
