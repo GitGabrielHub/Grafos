@@ -351,7 +351,7 @@ class Grafo:
 
     def caminho_euleriano(self):
         if not (self.conexo()):
-            return False
+            return []
 
         for vertice in self.N:
             lista = self.eh_euleriano(vertice,[],[])
