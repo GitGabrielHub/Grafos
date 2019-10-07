@@ -1,53 +1,106 @@
-from grafo_adj_nao_dir import Grafo
-
-# grafoParaiba = Grafo(['J', 'C', 'E', 'P', 'M', 'T', 'Z'],
-#                     {'a1': 'J-C', 'a2': 'C-E', 'a3': 'C-E', 'a4': 'C-P', 'a5': 'C-P', 'a6': 'C-M', 'a7': 'C-T',
-#                      'a8': 'M-T', 'a9': 'T-Z'})
+from Roteiro5_funcoes import Grafo
 
 
+grafo = Grafo()
 
-g_p = Grafo(['J', 'C', 'E', 'P', 'M', 'T', 'Z'])
-g_p.adicionaAresta('J-C')
-g_p.adicionaAresta('C-E')
-g_p.adicionaAresta('C-E')
-g_p.adicionaAresta('C-P')
-g_p.adicionaAresta('C-P')
-g_p.adicionaAresta('C-M')
-g_p.adicionaAresta('C-T')
-g_p.adicionaAresta('M-T')
-g_p.adicionaAresta('T-Z')
-# g_p.adicionaAresta('H-I')
-# g_p.adicionaAresta('Z-Z')
+Grafo.adicionaVertice(grafo,"A")
+Grafo.adicionaVertice(grafo,"B")
+Grafo.adicionaVertice(grafo,"C")
+Grafo.adicionaVertice(grafo,"D")
+Grafo.adicionaVertice(grafo,"E")
+Grafo.adicionaVertice(grafo,"F")
+Grafo.adicionaVertice(grafo,"G")
+Grafo.adicionaVertice(grafo,"H")
+Grafo.adicionaVertice(grafo,"I")
+Grafo.adicionaVertice(grafo,"J")
+Grafo.adicionaVertice(grafo,"K")
+Grafo.adicionaVertice(grafo,"L")
+Grafo.adicionaVertice(grafo,"M")
+Grafo.adicionaVertice(grafo,"N")
+Grafo.adicionaVertice(grafo,"O")
+Grafo.adicionaVertice(grafo,"P")
+Grafo.adicionaVertice(grafo,"Q")
+Grafo.adicionaVertice(grafo,"R")
+Grafo.adicionaVertice(grafo,"S")
+Grafo.adicionaVertice(grafo,"T")
+
+Grafo.adicionaAresta(grafo, "A-B")
+Grafo.adicionaAresta(grafo, "A-C")
+Grafo.adicionaAresta(grafo, "B-C")
+Grafo.adicionaAresta(grafo, "B-D")
+Grafo.adicionaAresta(grafo, "C-E")
+Grafo.adicionaAresta(grafo, "D-E")
+Grafo.adicionaAresta(grafo, "D-F")
+Grafo.adicionaAresta(grafo, "E-F")
+Grafo.adicionaAresta(grafo, "G-H")
+Grafo.adicionaAresta(grafo, "H-I")
+Grafo.adicionaAresta(grafo, "I-J")
+Grafo.adicionaAresta(grafo, "J-K")
+Grafo.adicionaAresta(grafo, "G-L")
+Grafo.adicionaAresta(grafo, "H-M")
+Grafo.adicionaAresta(grafo, "O-J")
+Grafo.adicionaAresta(grafo, "L-M")
+Grafo.adicionaAresta(grafo, "M-N")
+Grafo.adicionaAresta(grafo, "N-O")
+Grafo.adicionaAresta(grafo, "O-L")
+Grafo.adicionaAresta(grafo, "B-G")
+Grafo.adicionaAresta(grafo, "D-K")
+Grafo.adicionaAresta(grafo, "F-J")
+Grafo.adicionaAresta(grafo, "E-I")
+Grafo.adicionaAresta(grafo, "T-P")
+Grafo.adicionaAresta(grafo, "P-Q")
+Grafo.adicionaAresta(grafo, "Q-R")
+Grafo.adicionaAresta(grafo, "R-S")
+Grafo.adicionaAresta(grafo, "S-P")
+Grafo.adicionaAresta(grafo, "S-T")
+Grafo.adicionaAresta(grafo, "R-T")
+Grafo.adicionaAresta(grafo, "T-C")
+Grafo.adicionaAresta(grafo, "Q-D")
 
 
-# g_p = Grafo(['J', 'C', 'E', 'P'])
-# g_p.adicionaAresta('J-C')
-# g_p.adicionaAresta('J-E')
-# g_p.adicionaAresta('J-P')
-# g_p.adicionaAresta('C-E')
-# g_p.adicionaAresta('C-P')
-# g_p.adicionaAresta('E-P')
-
-# g_p = Grafo(['C', 'D'])
-# g_p.adicionaAresta('D-C')
-# g_p.adicionaAresta('C-C')
+print(grafo)
 
 
-# g_p = Grafo(['A','B','C','D','E','J'])
-# g_p.adicionaAresta('A-B')
-# g_p.adicionaAresta('A-C')
-# g_p.adicionaAresta('C-D')
-# g_p.adicionaAresta('C-J')
-# g_p.adicionaAresta('C-J')
-# g_p.adicionaAresta('D-E')
 
-print(g_p)
-# print(g_p.vertices_nao_adjacentes())
-# print(g_p.ha_laco())
-# print(g_p.ha_paralelas())
-# print(g_p.grau("C"))
-# print(g_p.arestas_sobre_vertice("C"))
-# print(g_p.vertice_sobre_vertice("P"))
-print(g_p.ha_caminho("J","E"))
-print(g_p.conexo())
-print(g_p.caminho_euleriano()[::-1])
+print(Grafo.grau(grafo, 'F'))
+
+
+
+print(Grafo.vertices_adjacentes(grafo,'A'))
+print(Grafo.vertices_adjacentes(grafo,'B'))
+print(Grafo.vertices_adjacentes(grafo,'C'))
+print(Grafo.vertices_adjacentes(grafo,'D'))
+print(Grafo.vertices_adjacentes(grafo,'E'))
+print(Grafo.vertices_adjacentes(grafo,'F'))
+
+print(Grafo.caminho_euleriano(grafo))
+
+ciclo = Grafo.ciclo_hamiltoniano(grafo)
+print(ciclo)
+
+
+
+grafo2 = Grafo()
+
+
+Grafo.adicionaVertice(grafo2,"A")
+Grafo.adicionaVertice(grafo2,"B")
+Grafo.adicionaVertice(grafo2,"C")
+Grafo.adicionaVertice(grafo2,"D")
+Grafo.adicionaVertice(grafo2,"E")
+
+Grafo.adicionaAresta(grafo2, "A-B")
+Grafo.adicionaAresta(grafo2, "A-D")
+Grafo.adicionaAresta(grafo2, "B-C")
+Grafo.adicionaAresta(grafo2, "B-E")
+Grafo.adicionaAresta(grafo2, "C-D")
+Grafo.adicionaAresta(grafo2, "D-E")
+Grafo.adicionaAresta(grafo2, "C-A")
+
+print()
+print(grafo2)
+
+ciclo2= Grafo.ciclo_hamiltoniano(grafo2)
+
+print(ciclo2)
+

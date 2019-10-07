@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 class VerticeInvalidoException(Exception):
     pass
 
@@ -387,6 +385,63 @@ class Grafo:
 
         return []
 
+    def vertices_adjacentes(self, raiz):
+        index = self.N.index(raiz)
+        adjacentes = []
+        for i in range(index+1):
+            if self.M[i][index] > 0:
+                adjacentes.append(self.N[i])
+        for j in range(index, len(self.M)):
+            if self.M[index][j] > 0:
+                adjacentes.append(self.N[j])
+        return adjacentes
+
+
+    def visita_hamiltoniano(self, partida, raiz, ja_visitados = [], caminho = []):
+        if raiz in ja_visitados:
+            if raiz == partida:
+                if len(caminho)  == len(self.N):
+                    return True
+            return False
+        adjacentes = self.vertices_adjacentes(raiz)
+
+        ja_visitados.append(raiz)
+        caminho.append(raiz)
+        fechou = False
+        for v in adjacentes:
+            fechou = self.visita_hamiltoniano(partida,v,ja_visitados,caminho)
+            if fechou == True or type(fechou)!= bool:
+                return caminho
+        ja_visitados.remove(raiz)
+        caminho.pop()
+        return False
+
+    def padroniza_caminho(self,vertices = []):
+        caminho = []
+        for i in range(len(vertices)-1):
+            caminho.append(vertices[i])
+            caminho.append(vertices[i] + self.SEPARADOR_ARESTA + vertices[i+1])
+        caminho.append(vertices[-1])
+        return caminho
+
+    def ciclo_hamiltoniano(self):
+        ja_visitados = []
+        falta_visitar = self.N.copy()
+        caminho = []
+        for v in self.N:
+            partida = v
+
+            ciclo = self.visita_hamiltoniano(v, v,ja_visitados,caminho)
+
+            if type(ciclo) != bool:
+                caminho = ciclo
+                caminho.append(v)
+                break
+        if len(caminho) != 0:
+            caminho_pronto= self.padroniza_caminho(caminho)
+            return caminho_pronto
+        return []
+
     def __str__(self):
         '''
         Fornece uma representação do tipo String do grafo.
@@ -413,34 +468,3 @@ class Grafo:
             grafo_str += '\n'
 
         return grafo_str
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
