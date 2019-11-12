@@ -293,9 +293,7 @@ class Grafo:
         while True:
 
             if w  == destino:
-
-                print(self.caminho_djkistra(origem,destino,[],atributosVertice))
-                return True
+                return self.caminho_djkistra(origem,destino,[],atributosVertice)
 
             if self.verifica_fi(atributosVertice):
                 return False
