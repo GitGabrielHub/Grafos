@@ -19,7 +19,7 @@ class Grafo:
     __maior_vertice = 0
     pesos = dict()
     pesos.clear()
-    MAX = sys.maxsize
+    MAX = sys.maxsize - 1
 
     def __init__(self, V=None, M=None):
         '''
@@ -293,7 +293,11 @@ class Grafo:
         while True:
 
             if w  == destino:
-                return self.caminho_djkistra(origem,destino,[],atributosVertice)
+                if(atributosVertice[w][2] is None):
+                    return False
+                caminho = self.caminho_djkistra(origem,destino,[],atributosVertice)
+                caminho.reverse()
+                return caminho
 
             if self.verifica_fi(atributosVertice):
                 return False
@@ -305,7 +309,7 @@ class Grafo:
                     atributosVertice[vertice][0] = atributosVertice[w][0] + self.retornaPeso(w + self.SEPARADOR_ARESTA + vertice)
                     atributosVertice[vertice][2] = w
 
-            minBeta = self.MAX
+            minBeta = self.MAX + 1
             for vertice in self.N:
                 if( atributosVertice[vertice][0] < minBeta and not atributosVertice[vertice][1]):
                     minBeta = atributosVertice[vertice][0]
@@ -320,6 +324,58 @@ class Grafo:
         if(origem == destino):
             return lista
         return self.caminho_djkistra(origem,atributosVertice[destino][2],lista,atributosVertice)
+
+    def djkistra_drone(self, origem, destino, carga_atual, carga_maxima, vertices_recargas = []):
+        atributosVertice = self.init_djkistra(origem)
+        u = origem
+        v = destino
+        w = u
+        r = None
+
+        while True:
+
+            carga_atual -= 1
+
+            if(w in vertices_recargas):
+                print("recarreguei")
+                carga_atual = carga_maxima
+
+            if w == destino:
+                if (atributosVertice[w][2] is None):
+                    return False
+
+                caminho = self.caminho_djkistra(origem, destino, [], atributosVertice)
+                caminho.reverse()
+                return caminho
+
+            if self.verifica_fi(atributosVertice):
+                return False
+
+            adjacentes = self.vertice_sobre_vertice(w)
+            carga_anterior = carga_atual
+
+            for vertice in adjacentes:
+
+                if (vertice in vertices_recargas):
+                    carga_anterior = carga_atual
+                    carga_atual = carga_maxima
+
+                if (atributosVertice[vertice][0] > atributosVertice[w][0] + self.retornaPeso (
+                        w + self.SEPARADOR_ARESTA + vertice) and carga_atual > 0):
+                    atributosVertice[vertice][0] = atributosVertice[w][0] + self.retornaPeso(
+                        w + self.SEPARADOR_ARESTA + vertice)
+                    atributosVertice[vertice][2] = w
+
+                carga_atual = carga_anterior
+
+            minBeta = self.MAX + 1
+            for vertice in self.N:
+                if (atributosVertice[vertice][0] < minBeta and not atributosVertice[vertice][1]):
+                    minBeta = atributosVertice[vertice][0]
+                    r = vertice
+
+            atributosVertice[r][1] = True
+            w = r
 
     def __str__(self):
             '''
