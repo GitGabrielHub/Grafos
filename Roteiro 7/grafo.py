@@ -267,14 +267,14 @@ class Grafo:
                 vertices.append(self.N[indice_vertice_1])
         return vertices
 
-    def init_djkistra(self,u):
+    def init_djkistra(self,u,carga_atual):
         dic = dict()
 
-        dic[u] = [0,True,None]
+        dic[u] = [0,True,None,carga_atual]
 
         for i in self.N:
             if(i != u ):
-                dic[i] = [self.MAX,False,None]
+                dic[i] = [self.MAX,False,None,0]
         return dic
 
     def verifica_fi(self, dic):
@@ -284,7 +284,7 @@ class Grafo:
         return True
 
     def djkistra(self,origem,destino):
-        atributosVertice = self.init_djkistra(origem)
+        atributosVertice = self.init_djkistra(origem,0)
         u = origem
         v = destino
         w = u
@@ -326,7 +326,7 @@ class Grafo:
         return self.caminho_djkistra(origem,atributosVertice[destino][2],lista,atributosVertice)
 
     def djkistra_drone(self, origem, destino, carga_atual, carga_maxima, vertices_recargas = []):
-        atributosVertice = self.init_djkistra(origem)
+        atributosVertice = self.init_djkistra(origem,carga_atual)
         u = origem
         v = destino
         w = u
@@ -334,11 +334,13 @@ class Grafo:
 
         while True:
 
-            carga_atual -= 1
+            carga_atual = atributosVertice[w][3]
 
-            if(w in vertices_recargas):
-                print("recarreguei")
+            if (w in vertices_recargas):
+                print("recarreguei em ", w)
                 carga_atual = carga_maxima
+
+            carga_atual -= 1
 
             if w == destino:
                 if (atributosVertice[w][2] is None):
@@ -352,21 +354,15 @@ class Grafo:
                 return False
 
             adjacentes = self.vertice_sobre_vertice(w)
-            carga_anterior = carga_atual
 
             for vertice in adjacentes:
-
-                if (vertice in vertices_recargas):
-                    carga_anterior = carga_atual
-                    carga_atual = carga_maxima
-
+                atributosVertice[vertice][3] = carga_atual
                 if (atributosVertice[vertice][0] > atributosVertice[w][0] + self.retornaPeso (
-                        w + self.SEPARADOR_ARESTA + vertice) and carga_atual > 0):
+                        w + self.SEPARADOR_ARESTA + vertice) and (carga_atual > 0 or vertice in vertices_recargas)):
                     atributosVertice[vertice][0] = atributosVertice[w][0] + self.retornaPeso(
                         w + self.SEPARADOR_ARESTA + vertice)
                     atributosVertice[vertice][2] = w
 
-                carga_atual = carga_anterior
 
             minBeta = self.MAX + 1
             for vertice in self.N:
