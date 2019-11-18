@@ -29,9 +29,9 @@ class Grafo:
         :param V: Uma matriz de adjacência que guarda as arestas do grafo. Cada entrada da matriz tem um inteiro que indica a quantidade de arestas que ligam aqueles vértices
         '''
 
-        if V == None:
+        if V is None:
             V = list()
-        if M == None:
+        if M is None:
             M = list()
 
         for v in V:
@@ -337,12 +337,11 @@ class Grafo:
             carga_atual = atributosVertice[w][3]
 
             if (w in vertices_recargas):
-                print("recarreguei em ", w)
                 carga_atual = carga_maxima
 
-            carga_atual -= 1
+            carga_atual += -1
 
-            if w == destino:
+            if w == v:
                 if (atributosVertice[w][2] is None):
                     return False
 
@@ -358,7 +357,7 @@ class Grafo:
             for vertice in adjacentes:
                 atributosVertice[vertice][3] = carga_atual
                 if (atributosVertice[vertice][0] > atributosVertice[w][0] + self.retornaPeso (
-                        w + self.SEPARADOR_ARESTA + vertice) and (carga_atual > 0 or vertice in vertices_recargas)):
+                        w + self.SEPARADOR_ARESTA + vertice) and (carga_atual > 0 or vertice in vertices_recargas or (vertice == v and carga_atual == 0))):
                     atributosVertice[vertice][0] = atributosVertice[w][0] + self.retornaPeso(
                         w + self.SEPARADOR_ARESTA + vertice)
                     atributosVertice[vertice][2] = w
